@@ -4,7 +4,7 @@ import { userRoutes } from './app/modules/user/user.router'
 
 export const app: Application = express()
 
-// middlewares 
+// middlewares
 app.use(express.json())
 app.use(cors())
 
