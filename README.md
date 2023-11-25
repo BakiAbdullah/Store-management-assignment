@@ -6,12 +6,6 @@ Clone the project
   git clone https://github.com/BakiAbdullah/Store-management-assignment.git
 ```
 
-Go to the project directory
-
-```bash
-  cd my-project
-```
-
 Install dependencies
 
 ```bash
