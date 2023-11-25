@@ -2,7 +2,7 @@ import {z} from 'zod'
 
 const orderValidationWithZod = z.object({
   productName: z.string().min(1, { message: "Product name must not be empty!" }),
-  price: z.number().min(0.01, { message: "Price must be greater than 0" }),
+  productPrice: z.number().min(0.01, { message: "Price must be greater than 0" }),
   quantity: z.number().min(1, { message: "Quantity must be at least 1" }),
 });
 

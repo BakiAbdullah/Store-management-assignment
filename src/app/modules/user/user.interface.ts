@@ -1,6 +1,6 @@
 interface IOrder {
   productName: string
-  producPrice: number
+  productPrice: number
   quantity: number
 }
 

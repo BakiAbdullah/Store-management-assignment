@@ -19,13 +19,27 @@ const getAllUserFromDB = async () => {
 }
 
 const getSingleUser = async (userId: number) => {
-  const result = await UserModel.findOne({ userId });
-  return result;
-};
+  const result = await UserModel.findOne({ userId })
+  return result
+}
 
+const updateAUser = async (userId: number, updateData: Partial<IUser>) => {
+  const result = await UserModel.findOneAndUpdate({ userId }, updateData, {
+    new: true,
+    runValidators: true,
+  })
+  return result
+}
+
+const deleteAUser = async (userId: number) => {
+  const result = await UserModel.deleteOne({ userId })
+  return result
+}
 
 export const userServicesToController = {
   createUserInDB,
   getAllUserFromDB,
-  getSingleUser
+  getSingleUser,
+  updateAUser,
+  deleteAUser
 }

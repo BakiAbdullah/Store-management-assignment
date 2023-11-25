@@ -68,8 +68,76 @@ const getSingleUser = async (req: Request, res: Response) => {
   }
 }
 
+const updateAUser = async (req: Request, res: Response) => {
+  try {
+    const updatedData = userValidationWithZod.partial().parse(req.body)
+    const userId = parseInt(req.params.userId)
+    const user = await userServicesToController.getSingleUser(userId)
+
+    if (!user)
+      return res.status(404).json({
+        success: false,
+        message: 'User not found!',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      })
+
+    const updatedUser = await userServicesToController.updateAUser(
+      userId,
+      updatedData,
+    )
+
+    res.status(200).json({
+      success: true,
+      message: 'User updated successfully!',
+      data: updatedUser,
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong!',
+      error: error,
+    })
+  }
+}
+
+const deleteAUser = async (req: Request, res: Response) => {
+  try {
+    const userId = parseInt(req.params.userId)
+    const user = await userServicesToController.getSingleUser(userId)
+
+    if (!user)
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      })
+
+    await userServicesToController.deleteAUser(userId)
+
+    res.status(200).json({
+      success: true,
+      message: 'User deleted successfully!',
+      data: null,
+    })
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong!',
+      error: error,
+    })
+  }
+}
+
 export const userControllers = {
   createUser,
   getAllUsers,
   getSingleUser,
+  updateAUser,
+  deleteAUser,
 }
