@@ -5,7 +5,7 @@ interface IOrder {
 }
 
 interface IUser {
-  username: string
+  userName: string
   userId: number
   password: string
   fullName: {
