@@ -1,6 +1,6 @@
 import { Schema, model } from 'mongoose'
 import { IUser } from './user.interface'
-
+import bcrypt from "bcrypt";
 // 2. User Schema corresponding to the user interface.
 const userSchema = new Schema<IUser>({
   userName: { type: String, required: true },
@@ -27,6 +27,18 @@ const userSchema = new Schema<IUser>({
     },
   ],
 })
+
+// Hiding the password
+userSchema.pre("save", function (next) {
+  const hidePassword = bcrypt.hashSync(this.password, 10);
+  this.password = hidePassword;
+  next();
+});
+userSchema.set("toJSON", {
+  transform: function (doc, rec) {
+    delete rec.password;
+  },
+});
 
 // User Model
 export const UserModel = model<IUser>('User', userSchema)

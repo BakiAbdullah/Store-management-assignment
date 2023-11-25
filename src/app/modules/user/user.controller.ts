@@ -1,10 +1,12 @@
 import { Request, Response } from 'express'
 import { userServicesToController } from './user.service'
+import { userValidationWithZod } from './user.validation.zod'
 
 const createUser = async (req: Request, res: Response) => {
   try {
     const userData = req.body
-    const result = await userServicesToController.createUserInDB(userData)
+    const validatedData = userValidationWithZod.parse(userData)
+    const result = await userServicesToController.createUserInDB(validatedData)
 
     res.status(201).json({
       success: true,
@@ -12,7 +14,6 @@ const createUser = async (req: Request, res: Response) => {
       data: result,
     })
   } catch (error) {
-    console.log(error)
     res.status(500).json({
       success: false,
       message: 'Something went wrong!!',
