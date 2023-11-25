@@ -1,4 +1,4 @@
-import { IUser } from './user.interface'
+import { IOrder, IUser } from './user.interface'
 import { UserModel } from './user.model'
 
 const createUserInDB = async (user: IUser) => {
@@ -36,10 +36,58 @@ const deleteAUser = async (userId: number) => {
   return result
 }
 
+const makeOrder = async (userId: number, orderInfo: IOrder) => {
+  const result = await UserModel.findOneAndUpdate(
+    { userId },
+    { $push: { orders: orderInfo } },
+  )
+  return result
+}
+
+const getAllOrders = async (userId: number) => {
+  const result = await UserModel.findOne({ userId }).select({ orders: 1 })
+  return result
+}
+
+const getTotalPrice = async (userId: number) => {
+  const result = await UserModel.aggregate([
+    {
+      $match: {
+        userId,
+      },
+    },
+
+    { $unwind: '$orders' },
+
+    {
+      $group: {
+        _id: null,
+        totalPrice: {
+          $sum: { $multiply: ['$orders.price', '$orders.quantity'] },
+        },
+      },
+    },
+
+    // stage-4
+    {
+      $project: {
+        _id: 0,
+        totalPrice: { $round: ['$totalPrice', 2] },
+      },
+    },
+  ])
+
+  if (result.length > 0) return result[0]
+  else return (result[0] = { totalPrice: 0 })
+}
+
 export const userServicesToController = {
   createUserInDB,
   getAllUserFromDB,
   getSingleUser,
   updateAUser,
-  deleteAUser
+  deleteAUser,
+  makeOrder,
+  getAllOrders,
+  getTotalPrice,
 }

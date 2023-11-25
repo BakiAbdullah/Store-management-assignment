@@ -1,11 +1,11 @@
 interface IOrder {
   productName: string
-  productPrice: number
+  price: number
   quantity: number
 }
 
 interface IUser {
-  userName: string
+  username: string
   userId: number
   password: string
   fullName: {
